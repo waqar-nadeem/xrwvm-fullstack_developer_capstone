@@ -1,8 +1,15 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <!-- Link the style sheet here -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Best Cars Dealership</title>
+  <!-- Link the stylesheets -->
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
-<div>
+<body>
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
     <div class="container-fluid">
       <h2 style="padding-right: 5%;">Dealerships</h2>
@@ -24,45 +31,50 @@
       </div>
     </div>
   </nav>
-  
-    <div class="card" style="width: 80%;margin: auto; margin-top:5%;">
-      <div class="banner" name="about-header">
-      <!-- Insert header information here -->
-      </div>
-      <div style="display: flex;flex-direction: row; margin:auto">
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
+
+  <!-- About Section -->
+  <div class="card" style="width: 80%; margin: auto; margin-top:5%;">
+    <div class="banner" name="about-header" style="padding: 20px; text-align: center;">
+      <h1>About Us</h1>
+      <p>Welcome to Best Cars Dealership, your trusted destination for high-quality domestic and imported cars across North America. We provide excellent customer service and competitive prices.</p>
+    </div>
+
+    <!-- Team Section -->
+    <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 30px; flex-wrap: nowrap; gap: 10px;">
+
+      <div class="card" style="flex: 1; margin: 10px; min-width: 200px;">
+        <img class="card-img-top" src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" alt="Alice Johnson">
         <div class="card-body">
-          <p class="title">Person1</p>
-          <p>Person1 Title</p>
-          <p class="card-text">Some text that explains the person1 in about 2 short sentences</p>
-          <p>person1@example.com</p>
+          <p class="title"><strong>Alice Johnson</strong></p>
+          <p>CEO & Founder</p>
+          <p class="card-text">Alice brings over 15 years of automotive industry experience and leads our team with vision and integrity.</p>
+          <p>alice.johnson@bestcars.com</p>
         </div>
       </div>
 
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
+      <div class="card" style="flex: 1; margin: 10px; min-width: 200px;">
+        <img class="card-img-top" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" alt="Michael Smith">
         <div class="card-body">
-          <p class="title">Person2</p>
-          <p>Person2 Title</p>
-          <p class="card-text">Some text that explains the person2 in about 2 short sentences</p>
-          <p>person2@example.com</p>
+          <p class="title"><strong>Michael Smith</strong></p>
+          <p>Head of Sales</p>
+          <p class="card-text">Michael oversees our nationwide sales operations, ensuring customers find the perfect vehicle for their needs.</p>
+          <p>michael.smith@bestcars.com</p>
         </div>
       </div>
 
-      <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
+      <div class="card" style="flex: 1; margin: 10px; min-width: 200px;">
+        <img class="card-img-top" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" alt="Sophia Lee">
         <div class="card-body">
-          <p class="title">Person3</p>
-          <p>Person3 Title</p>
-          <p class="card-text">Some text that explains the person3 in about 2 short sentences</p>
-          <p>person3@example.com</p>
+          <p class="title"><strong>Sophia Lee</strong></p>
+          <p>Marketing Director</p>
+          <p class="card-text">Sophia leads our marketing initiatives, creating campaigns that connect with customers across the country.</p>
+          <p>sophia.lee@bestcars.com</p>
         </div>
       </div>
-    </div>
-    </div>
-    </div>
-    
-</div>
 
+    </div>
+  </div>
+
+  <script src="/static/bootstrap.bundle.min.js"></script>
+</body>
 </html>
