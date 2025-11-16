@@ -13,8 +13,8 @@ from django.contrib.auth import login, authenticate
 import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
-# from .populate import initiate
-
+from .populate import initiate # <--- UNCOMMENTED: Needed for initial data load
+from .models import CarMake, CarModel # <--- NEW: Imports Car models
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -37,6 +37,37 @@ def login_user(request):
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
+
+
+# <HINT> Add a method to get the list of cars
+def get_cars(request):
+    """
+    Retrieves all car models and their associated car make details.
+    Initializes car data if the CarMake collection is empty.
+    """
+    # Check if CarMake data exists
+    count = CarMake.objects.filter().count()
+    print(f"Car Make Count: {count}")
+    if(count == 0):
+        # Populate the database if empty
+        initiate()
+        
+    # Retrieve CarModel objects, using select_related for efficient fetching of related CarMake data
+    car_models = CarModel.objects.select_related('car_make').all()
+    
+    cars = []
+    # Structure the data into a list of dictionaries for JSON response
+    for car_model in car_models:
+        cars.append({
+            "CarModel": car_model.name, 
+            "CarMake": car_model.car_make.name,
+            "ID": car_model.id,
+            "Type": car_model.type,
+            "Year": car_model.year
+        })
+    
+    return JsonResponse({"CarModels": cars})
+
 
 # Create a `logout_request` view to handle sign out request
 # def logout_request(request):
@@ -62,4 +93,4 @@ def login_user(request):
 
 # Create a `add_review` view to submit a review
 # def add_review(request):
-# ...
+# ...   
