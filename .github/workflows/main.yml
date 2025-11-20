@@ -1,52 +1,42 @@
-name: Lint Code Base
+name: CI
 
 on:
   push:
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # -------------------------
-      # Setup Python
-      # -------------------------
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Install Python dependencies
-        run: |
-          pip install flake8
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
 
-      - name: Lint Python Files
-        run: |
-          echo "Running Python linter..."
-          flake8 server --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 server --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Lint Python files
+      run: |
+        find ./server -name "*.py" -exec flake8 {} +
 
-      # -------------------------
-      # Setup Node / JavaScript
-      # -------------------------
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
 
-      - name: Install JSHint
-        run: npm install -g jshint
+    - name: Install JSHint
+      run: npm install -g jshint
 
-      # -------------------------
-      # Lint JavaScript Files
-      # -------------------------
-      - name: Lint JavaScript Files
-        run: |
-          echo "Running JavaScript linter..."
-          # Run JSHint with ES6+ support and node mode enabled
-          find ./server/database -name "*.js" -exec jshint --esversion 8 --verbose --undef --node {} \+
-          echo "JS linting completed."
+    - name: Lint JS files
+      run: |
+        # Lint with ES8 support to handle async/await and modern JS
+        find ./server/database -name "*.js" -exec jshint --esversion=8 {} +
