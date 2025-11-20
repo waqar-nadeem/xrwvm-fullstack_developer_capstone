@@ -38,5 +38,5 @@ jobs:
 
     - name: Lint JS files
       run: |
-        # Lint with ES8 support to handle async/await and modern JS
-        find ./server/database -name "*.js" -exec jshint --esversion=8 {} +
+        echo "Running JavaScript linter..."
+        find ./server/database -name "*.js" -exec jshint --config <(echo '{"esversion":8}') {} +
