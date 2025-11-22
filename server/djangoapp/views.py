@@ -1,20 +1,22 @@
 # views.py
 
 # Required imports
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
-from django.contrib.auth.models import User
-from django.contrib.auth import logout, login, authenticate
-from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
-import logging
 import json
+import logging
+from datetime import datetime
 
-from .populate import initiate
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import CarMake, CarModel
-from .restapis import get_request, analyze_review_sentiments, post_review
+from .populate import initiate
+from .restapis import analyze_review_sentiments, get_request, post_review
 
 logger = logging.getLogger(__name__)
+
 
 # ----------------------------
 # LOGIN VIEW
@@ -24,17 +26,21 @@ def login_user(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            username = data.get('userName')
-            password = data.get('password')
+            username = data.get("userName")
+            password = data.get("password")
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return JsonResponse({"userName": username, "status": "Authenticated"})
             else:
-                return JsonResponse({"userName": username, "error": "Invalid Credentials"})
+                return JsonResponse(
+                    {"userName": username, "error": "Invalid Credentials"}
+                )
         except Exception as e:
             logger.error(f"Login failed: {e}")
-            return JsonResponse({"error": "Server error", "details": str(e)}, status=500)
+            return JsonResponse(
+                {"error": "Server error", "details": str(e)}, status=500
+            )
     else:
         return JsonResponse({"error": "Invalid request method"}, status=400)
 
@@ -47,21 +53,23 @@ def registration(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            username = data.get('userName')
-            password = data.get('password')
-            first_name = data.get('firstName')
-            last_name = data.get('lastName')
-            email = data.get('email')
+            username = data.get("userName")
+            password = data.get("password")
+            first_name = data.get("firstName")
+            last_name = data.get("lastName")
+            email = data.get("email")
 
             if User.objects.filter(username=username).exists():
-                return JsonResponse({"userName": username, "error": "Already Registered"})
+                return JsonResponse(
+                    {"userName": username, "error": "Already Registered"}
+                )
 
             user = User.objects.create_user(
                 username=username,
                 password=password,
                 first_name=first_name,
                 last_name=last_name,
-                email=email
+                email=email,
             )
             login(request, user)
             return JsonResponse({"userName": username, "status": "Authenticated"})
@@ -69,7 +77,9 @@ def registration(request):
             return JsonResponse({"error": "Invalid JSON"}, status=400)
         except Exception as e:
             logger.error(f"Registration failed: {e}")
-            return JsonResponse({"error": "Server error", "details": str(e)}, status=500)
+            return JsonResponse(
+                {"error": "Server error", "details": str(e)}, status=500
+            )
     else:
         return JsonResponse({"error": "Invalid request method"}, status=400)
 
@@ -98,14 +108,14 @@ def get_cars(request):
             initiate()
 
         # Fetch car models
-        car_models = CarModel.objects.select_related('car_make').all()
+        car_models = CarModel.objects.select_related("car_make").all()
         cars = [
             {
                 "ID": car_model.id,
                 "CarMake": car_model.car_make.name,
                 "CarModel": car_model.name,
                 "Type": getattr(car_model, "type", ""),
-                "Year": getattr(car_model, "year", "")
+                "Year": getattr(car_model, "year", ""),
             }
             for car_model in car_models
         ]
@@ -156,11 +166,13 @@ def get_dealer_reviews(request, dealer_id):
             # Analyze sentiment
             for review_detail in reviews:
                 try:
-                    response = analyze_review_sentiments(review_detail.get('review', ''))
-                    review_detail['sentiment'] = response.get('sentiment', 'neutral')
+                    response = analyze_review_sentiments(
+                        review_detail.get("review", "")
+                    )
+                    review_detail["sentiment"] = response.get("sentiment", "neutral")
                 except Exception as e:
                     logger.error(f"Sentiment analysis failed: {e}")
-                    review_detail['sentiment'] = 'neutral'
+                    review_detail["sentiment"] = "neutral"
             return JsonResponse({"status": 200, "reviews": reviews})
         else:
             return JsonResponse({"status": 400, "message": "Bad Request"})
@@ -184,4 +196,6 @@ def add_review(request):
 
     except Exception as e:
         logger.error(f"Add review failed: {e}")
-        return JsonResponse({"status": 500, "message": "Error in posting review", "error": str(e)})
+        return JsonResponse(
+            {"status": 500, "message": "Error in posting review", "error": str(e)}
+        )

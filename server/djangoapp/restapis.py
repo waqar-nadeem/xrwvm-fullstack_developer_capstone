@@ -1,17 +1,18 @@
-import requests
 import os
+
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
 backend_url = os.getenv(
     "backend_url",
-    default="https://nadeemwaqar2-3030.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/"
+    default="https://nadeemwaqar2-3030.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/",
 )
 sentiment_analyzer_url = os.getenv(
-    "sentiment_analyzer_url",
-    default="http://localhost:5050/"
+    "sentiment_analyzer_url", default="http://localhost:5050/"
 )
+
 
 def get_request(endpoint, **kwargs):
     """Send GET request to backend and return JSON"""
@@ -38,6 +39,7 @@ def get_request(endpoint, **kwargs):
         print(f"JSON decode error: {e}")
         return None
 
+
 def analyze_review_sentiments(text):
     url = sentiment_analyzer_url
     if not url.endswith("/"):
@@ -54,6 +56,7 @@ def analyze_review_sentiments(text):
     except ValueError as e:
         print(f"JSON decode error: {e}")
         return None
+
 
 def post_review(data_dict):
     request_url = backend_url
