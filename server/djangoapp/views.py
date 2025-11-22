@@ -7,8 +7,9 @@ import logging
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import JsonResponse
+# from django.shortcuts import get_object_or_404, redirect, render
+# from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import CarMake, CarModel
